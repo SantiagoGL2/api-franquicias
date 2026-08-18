@@ -2,9 +2,9 @@ spring:
   application:
     name: nequi
   datasource:
-    url: jdbc:postgresql://localhost:5432/mydatabase
-    username: myuser
-    password: secret
+    url: jdbc:postgresql://localhost:${POSTGRES_PORT:5432}/${POSTGRES_DB:franquicias}
+    username: ${POSTGRES_USER:franquicias}
+    password: ${POSTGRES_PASSWORD:franquicias}
   jpa:
     hibernate:
       ddl-auto: validate
