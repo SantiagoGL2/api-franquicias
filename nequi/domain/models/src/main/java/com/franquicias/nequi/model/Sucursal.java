@@ -50,7 +50,7 @@ public record Sucursal(Long id, String nombre, List<Producto> productos) {
 		return productos.stream().max(Comparator.comparingInt(Producto::stock));
 	}
 
-	private Producto buscarProducto(Long productoId) {
+	public Producto buscarProducto(Long productoId) {
 		return productos.stream()
 			.filter(producto -> Objects.equals(producto.id(), productoId))
 			.findFirst()

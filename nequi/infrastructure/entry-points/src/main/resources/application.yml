@@ -2,8 +2,9 @@ spring:
   application:
     name: nequi
   datasource:
-    # Matches docker-compose.yml at the repo root: run `docker compose up -d` before
-    # starting the app — nothing auto-starts Postgres anymore.
     url: jdbc:postgresql://localhost:5432/mydatabase
     username: myuser
     password: secret
+  jpa:
+    hibernate:
+      ddl-auto: validate
