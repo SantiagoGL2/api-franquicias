@@ -1,0 +1,42 @@
+// PostgreSQL driven adapter.
+//
+// Only `java` here on purpose — NOT the Spring Boot / dependency-management
+// plugins. This module is not executable; it just contributes JPA entities,
+// Spring Data repositories, MapStruct mappers and the port implementation to
+// infrastructure/entry-points's classpath. The Spring Boot BOM is imported
+// as a platform so transitive versions stay aligned without needing the
+// Boot plugin here.
+plugins {
+	id 'java'
+}
+
+dependencies {
+	implementation project(':domain:models')
+
+	implementation platform('org.springframework.boot:spring-boot-dependencies:4.1.0')
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'org.postgresql:postgresql'
+
+	// JPA entities only — never used in domain:models or applications:use-cases.
+	// Pinned explicitly: `implementation platform(...)` only manages the
+	// implementation/runtime graph, not compileOnly/annotationProcessor.
+	compileOnly 'org.projectlombok:lombok:1.18.46'
+	annotationProcessor 'org.projectlombok:lombok:1.18.46'
+
+	// Domain <-> JPA entity mapping.
+	implementation 'org.mapstruct:mapstruct:1.6.3'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+	// Lets the MapStruct processor see the getters Lombok generates in the same build.
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+	testImplementation platform('org.springframework.boot:spring-boot-dependencies:4.1.0')
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testCompileOnly 'org.projectlombok:lombok:1.18.46'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.46'
+	testAnnotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

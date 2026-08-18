@@ -1,0 +1,43 @@
+// Entry points module — the ONLY executable module in this build.
+//
+// Owns the Spring Boot plugin, the @SpringBootApplication class and
+// application.yml. Wires domain:models, applications:use-cases and
+// infrastructure:driven-adapters:postgresql-adapter together, and exposes
+// the REST API (controllers, DTOs, global exception handling).
+//
+// Lombok is compileOnly inside postgresql-adapter, and Gradle project
+// dependencies (`implementation project(...)`) never propagate compileOnly
+// across module boundaries, so Lombok never reaches this module's classpath
+// — no manual exclusion needed here, unlike the Maven reference scaffold's
+// spring-boot-maven-plugin <exclude>.
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '4.1.0'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+dependencies {
+	implementation project(':domain:models')
+	implementation project(':applications:use-cases')
+	implementation project(':infrastructure:driven-adapters:postgresql-adapter')
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3'
+
+	// spring-boot-flyway is the pure autoconfiguration module (Spring Boot 4 split);
+	// flyway-core is the library itself, flyway-database-postgresql the PostgreSQL dialect.
+	implementation 'org.springframework.boot:spring-boot-flyway'
+	implementation 'org.flywaydb:flyway-core'
+	runtimeOnly 'org.flywaydb:flyway-database-postgresql'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+// No spring-boot-docker-compose dependency here, on purpose: matching the reference
+// project, Postgres is started manually with `docker compose up -d` (from the repo root,
+// where docker-compose.yml lives) before running the app — Spring never auto-manages it.

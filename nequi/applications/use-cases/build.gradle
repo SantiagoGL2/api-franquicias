@@ -1,0 +1,24 @@
+// Use cases module.
+//
+// Implements the input ports declared here against the domain models. Not
+// executable on its own — it only contributes classes to
+// infrastructure/entry-points's classpath. No spring-context, no web/
+// persistence starter: use cases stay plain Java, framework-free.
+plugins {
+	id 'java'
+}
+
+dependencies {
+	implementation project(':domain:models')
+
+	// No dependency-management plugin here (this module stays framework-free in
+	// production code), so the Spring Boot BOM is imported as a platform just to
+	// resolve versions for the test-only starters below.
+	testImplementation platform('org.springframework.boot:spring-boot-dependencies:4.1.0')
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito:mockito-junit-jupiter'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

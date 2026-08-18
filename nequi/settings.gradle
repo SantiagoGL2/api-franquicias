@@ -1,0 +1,6 @@
+rootProject.name = 'franquicias-api'
+
+include 'domain:models'
+include 'applications:use-cases'
+include 'infrastructure:driven-adapters:postgresql-adapter'
+include 'infrastructure:entry-points'

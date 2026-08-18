@@ -1,0 +1,22 @@
+// Domain models module.
+//
+// Pure Java: entities, ports (outbound persistence contracts) and domain
+// exceptions. No Spring, no JPA, no Lombok in production code — this is the
+// center of the hexagon and depends on NOTHING. Every other module depends
+// on this one, in cascade, never the other way around (Dependency Inversion
+// Principle).
+plugins {
+	id 'java'
+}
+
+dependencies {
+	// No dependency-management plugin here (this module stays framework-free in
+	// production code), so the Spring Boot BOM is imported as a platform just to
+	// resolve versions for the test-only starter below.
+	testImplementation platform('org.springframework.boot:spring-boot-dependencies:4.1.0')
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
