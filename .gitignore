@@ -1,0 +1,11 @@
+# Build output (root project and every module: domain/models, applications/use-cases,
+# infrastructure/driven-adapters/postgresql-adapter, infrastructure/entry-points, etc.)
+build/
+.gradle/
+
+# IDE
+.idea/
+*.iml
+
+# Local secrets / environment overrides
+.env
